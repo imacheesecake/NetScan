@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Sherlyn's Network Scanner'</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #ffe6f2, #fff0f5);
+            font-family: 'Courier New', Courier, monospace;
+            color: #333;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff66a3;
+            font-size: 2.5em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid #ff66a3;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background: #fff;
+            border: 2px solid #ff66a3;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #cc3366;
+            display: block;
+            margin-top: 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #ffb3d9;
+            margin-bottom: 10px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        input[type="submit"] {
+            background-color: #ff66a3;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+            font-size: 1em;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+            input[type="submit"]:hover {
+                background-color: #ff3385;
+            }
+
+        fieldset {
+            border: 2px solid #ffb3d9;
+            margin-bottom: 15px;
+            padding: 10px;
+        }
+
+        legend {
+            font-weight: bold;
+            color: #cc3366;
+            text-transform: uppercase;
+        }
+
+        .option-desc {
+            font-weight: normal;
+            color: #555;
+        }
+
+        .flag-code {
+            color: #ff5500;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sherlyn's nmap Port Scanner</h1>
+    <form method="POST" action="/scan">
+        <label title="Enter the target IP address">IP Address:</label>
+        <input type="text" name="ip_address" required />
+
+        <fieldset>
+            <legend>Port Selection</legend>
+            <label title="Enter the starting port number">Start Port:</label>
+            <input type="text" name="start_port" value="1" />
+            <label title="Enter the ending port number">End Port:</label>
+            <input type="text" name="end_port" value="1024" />
+            <label title="Enter individual ports separated by commas (e.g. 22,80,443). This will be merged with the range.">
+                Individual Ports (optional):
+            </label>
+            <input type="text" name="ports" placeholder="e.g. 22,80,443" />
+        </fieldset>
+
+        <!-- Basic Scanning Options -->
+        <fieldset>
+            <legend>Basic Scanning Options</legend>
+            <label title="Performs a TCP SYN (stealth) scan">
+                <input type="checkbox" name="stealth" value="-sS">
+                Stealth Scan: <span class="flag-code">-sS</span> <span class="option-desc">— TCP SYN scan</span>
+            </label>
+            <label title="Scans UDP ports">
+                <input type="checkbox" name="udp" value="-sU">
+                UDP Scan: <span class="flag-code">-sU</span> <span class="option-desc">— UDP scan</span>
+            </label>
+            <label title="Detects service versions running on open ports">
+                <input type="checkbox" name="service" value="-sV">
+                Service Version Detection: <span class="flag-code">-sV</span> <span class="option-desc">— identifies services</span>
+            </label>
+            <label title="Attempts to determine the operating system of the target">
+                <input type="checkbox" name="os" value="-O">
+                OS Detection: <span class="flag-code">-O</span> <span class="option-desc">— OS fingerprinting</span>
+            </label>
+        </fieldset>
+
+        <!-- Network Discovery Options -->
+        <fieldset>
+            <legend>Network Discovery Options</legend>
+            <label title="Performs a ping sweep (ICMP echo) to discover live hosts">
+                <input type="checkbox" name="ping_sweep" value="-sn">
+                Ping Sweep: <span class="flag-code">-sn</span> <span class="option-desc">— ICMP host discovery</span>
+            </label>
+            <label title="Uses ARP requests to find hosts on the local network">
+                <input type="checkbox" name="arp" value="-PR">
+                ARP Scan: <span class="flag-code">-PR</span> <span class="option-desc">— ARP discovery</span>
+            </label>
+        </fieldset>
+
+        <!-- Packet Options -->
+        <fieldset>
+            <legend>Packet Options</legend>
+            <label title="Fragments packets to evade simple packet filters">
+                <input type="checkbox" name="fragment" value="-f">
+                Split Packets: <span class="flag-code">-f</span> <span class="option-desc">— fragments packets</span>
+            </label>
+            <label title="Randomizes the order of ports scanned to avoid detection">
+                <input type="checkbox" name="randomize" value="--randomize-ports">
+                Randomize Port Order: <span class="flag-code">--randomize-ports</span> <span class="option-desc">— random port order</span>
+            </label>
+        </fieldset>
+
+        <!-- Timing Options -->
+        <fieldset>
+            <legend>Timing Options</legend>
+            <label title="Paranoid/very slow scan for maximum stealth">
+                <input type="checkbox" name="timing_slow" value="-T0">
+                Paranoid/Very Slow Scan: <span class="flag-code">-T0</span> <span class="option-desc">— very slow mode</span>
+            </label>
+            <label title="Aggressive scan for faster results">
+                <input type="checkbox" name="timing_fast" value="-T4">
+                Aggressive/Fast Scan: <span class="flag-code">-T4</span> <span class="option-desc">— fast mode</span>
+            </label>
+        </fieldset>
+
+        <!-- Additional Scans and Scripts -->
+        <fieldset>
+            <legend>Additional Scans and Scripts</legend>
+            <label title="Runs Nmap's default NSE scripts to check common vulnerabilities">
+                <input type="checkbox" name="common_vuln" value="-sC">
+                Common Vulnerabilities: <span class="flag-code">-sC</span> <span class="option-desc">— default scripts</span>
+            </label>
+            <label title="Checks for the presence of a firewall">
+                <input type="checkbox" name="firewall" value="-sA">
+                Firewall Detection: <span class="flag-code">-sA</span> <span class="option-desc">— firewall check</span>
+            </label>
+            <label title="Performs traceroute to map the network path to the target">
+                <input type="checkbox" name="traceroute" value="--traceroute">
+                Traceroute: <span class="flag-code">--traceroute</span> <span class="option-desc">— route mapping</span>
+            </label>
+            <label title="Attempts FTP brute force testing using NSE scripts">
+                <input type="checkbox" name="ftp_brute" value="--script ftp-brute">
+                FTP Brute Force: <span class="flag-code">--script ftp-brute</span> <span class="option-desc">— FTP brute force</span>
+            </label>
+            <label title="Runs vulnerability detection scripts">
+                <input type="checkbox" name="vuln_scan" value="--script vuln">
+                Vulnerability Scan: <span class="flag-code">--script vuln</span> <span class="option-desc">— vuln detection</span>
+            </label>
+        </fieldset>
+        <input type="submit" value="Scan" />
+    </form>
+
+</body>
+</html>
